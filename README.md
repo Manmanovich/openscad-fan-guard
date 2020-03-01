@@ -1,4 +1,6 @@
 # openscad fan guard
+You can use it in your open scad projects for 3d printer/
+
 You can use this script to generate a fan guard so you can lasercut awesome holes for Fans.
 
 To use your fan in you project, export your fan guard to DXF in openscad.
