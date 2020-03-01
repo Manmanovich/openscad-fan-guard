@@ -15,6 +15,7 @@
 //Choose a size of your fan
 FanLength =  80;//[25,30,40,50,60,70,80,90,100,120,140]
 FanCutType       = 1;// [0:Hole, 1:Circles, 2:Holes]
+FanScrewHolesNeeded = 1;//[0:NO, 1:Yes]
 FanCutSrewHoleSize = 4.8; 
 
 
@@ -46,6 +47,7 @@ FanDiameter = FanLength+6;
 //diameter = 86;
 
 intersection() {
+    
     fanHole();
 
     //choose one effect:
@@ -54,8 +56,7 @@ intersection() {
 	else if(FanCutType == 2)  {FanHolesCut();}
 	
 }
-
-FanScrewHoles();
+if(FanScrewHolesNeeded == 1)  {FanScrewHoles();}
 
 module fanHole() {
     intersection() {
