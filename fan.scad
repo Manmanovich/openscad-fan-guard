@@ -12,84 +12,102 @@
     //90,83,100
     //120,105,130
     //140,125,150
+//Choose a size of your fan
+FanLength =  80;//[25,30,40,50,60,70,80,90,100,120,140]
+FanCutType       = 1;// [0:Hole, 1:Circles, 2:Holes]
+FanCutSrewHoleSize = 4.8; 
 
-length =  80;
-holedistance = 70;
-diameter = 86;
 
-screwhole = 4.8; 
+//Size circle cut. Used if "Circles" cut chosen
+FanCirclesCutThickness = 5;
+//Size circle cut distance. Used if "Circles" cut chosen
+FanCirclesCutDistance = 5;
+//Size circle cut croses. Used if "Circles" cut chosen
+FanCirclesCutCrossThickness = 5;
+//Holes cut size . Used if "Holes" cut chosen
+FanHolesCutDiameter = 5;
+//Holes cut size . Used if "Holes" cut chosen
+FanHolesCutDistance = 2;
 
-//effect vars
-    //circles:
-        circlesThickness = 5;
-        circlesDistance = 5;
-        circlesCrossThickness = 5;
-    //holes:
-        holesDiameter = 5;
-        holesDistance = 2;
+//Want yours? Uncomment below, comment if else system 
+//FanHoleDistance = 70;
+FanHoleDistance = FanLength == 25  ? 20 : 
+                 (FanLength == 25  ? 20 :
+                 (FanLength == 30  ? 24 :
+                 (FanLength == 40  ? 33 :
+                 (FanLength == 50  ? 40 :
+                 (FanLength == 60  ? 50 :
+                 (FanLength == 70  ? 60 :
+                 (FanLength == 80  ? 70 :
+                 (FanLength == 90  ? 83 :
+                 (FanLength == 100  ? 90 :
+                 (FanLength == 120 ? 105:125))))))))));
+FanDiameter = FanLength+6;
+//diameter = 86;
 
 intersection() {
     fanHole();
 
     //choose one effect:
-        //none();
-        //circles();
-        holes();
+    if(FanCutType == 0)  {none();}
+	else if(FanCutType == 1)  {FanCirclesEffect();}
+	else if(FanCutType == 2)  {FanHolesCut();}
+	
 }
 
-screwHoles();
+FanScrewHoles();
 
 module fanHole() {
     intersection() {
-        translate([-length/2,-length/2]){
-            square([length,length],0);
+        translate([-FanLength/2,-FanLength/2]){
+            square([FanLength,FanLength],0);
         }
-        circle(diameter/2,0);
+        circle(FanDiameter/2,$fn=0);
     }
 }
 
-module screwHoles() {
-    translate([holedistance/2,holedistance/2]){
-            circle(screwhole/2,0);
+module FanScrewHoles() {
+    translate([FanHoleDistance/2,FanHoleDistance/2]){
+            circle(FanCutSrewHoleSize/2,$fn=0);
         }
-    translate([-holedistance/2,holedistance/2]){
-            circle(screwhole/2,0);
+    translate([-FanHoleDistance/2,FanHoleDistance/2]){
+            circle(FanCutSrewHoleSize/2,$fn=0);
         }
-    translate([-holedistance/2,-holedistance/2]){
-            circle(screwhole/2,0);
+    translate([-FanHoleDistance/2,-FanHoleDistance/2]){
+            circle(FanCutSrewHoleSize/2,$fn=0);
         }
-    translate([holedistance/2,-holedistance/2]){
-            circle(screwhole/2,0);
+    translate([FanHoleDistance/2,-FanHoleDistance/2]){
+            circle(FanCutSrewHoleSize/2,$fn=0);
         }
 }
 
-module circles() {
+module FanCirclesEffect() {
     //circles
-    for (x = [0:circlesDistance*2:60]) {
+    for (x = [0:FanCirclesCutDistance*2:60]) {
         difference() {
-            circle(x+circlesThickness,0);
-            circle(x,0);
+            circle(x+FanCirclesCutThickness,$fn=0);
+            circle(x,$fn=0);
         }
     }
     //cross
     rotate([0,0,45]){
-        translate([-circlesCrossThickness/2,-length/2]){
-            square([circlesCrossThickness,length],0);
+        translate([-FanCirclesCutCrossThickness/2,-FanLength/2]){
+            square([FanCirclesCutCrossThickness,FanLength],0);
          }
-        translate([-length/2,-circlesCrossThickness/2]){
-            square([length,circlesCrossThickness],0);
+        translate([-FanLength/2,-FanCirclesCutCrossThickness/2]){
+            square([FanLength,FanCirclesCutCrossThickness],0);
          }
      }
 }
 
-module holes() {
-    for (x = [0:holesDiameter+holesDistance:length]) {
-        for (y = [holesDiameter:holesDiameter+holesDistance*2:length]) {
-            translate([x-length/2,y-length/2]){
-                circle(holesDiameter/2,0);
+module FanHolesCut() {
+    for (x = [0:FanHolesCutDiameter+FanHolesCutDistance:FanLength]) {
+        for (y = [FanHolesCutDiameter:FanHolesCutDiameter+FanHolesCutDistance*2:FanLength]) {
+            translate([x-FanLength/2,y-FanLength/2]){
+                circle((FanHolesCutDiameter/2),$fn=0);
             }
-            translate([x-holesDistance/2-holesDiameter/2-length/2,y-holesDistance-holesDiameter/2-length/2]){
-                circle(holesDiameter/2,0);
+            translate([x-FanHolesCutDistance/2-FanHolesCutDiameter/2-FanLength/2,y-FanHolesCutDistance-FanHolesCutDiameter/2-FanLength/2]){
+                circle(FanHolesCutDiameter/2,$fn=0);
             }
         }
     }
